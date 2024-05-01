@@ -28,15 +28,17 @@ const handleMessage = async (message) => {
     }
 
     try {
-        await axios.post('https://webhook.site/92dcf6d1-ac5c-4b4c-bb27-f5b3a794a9bd', {
-            message: message.body,
-            sender: message.from,
-            timestamp: message.timestamp,
-            // Add any other data you want to send
+        const response = await axios.post('http://127.0.0.1:8000/api/whatsapp/save', {
+            whatsapp: message.from,
+            token: message.body
         });
-        console.log('Message data sent to webhook successfully');
+        console.log('Message data sent to local API successfully');
+        console.log('API Response:', response.data);
+        if (response.data.message === "Token verified successfully") {
+            message.reply('Token verified successfully, Whatsapp Saved');
+        }
     } catch (error) {
-        console.error('Error sending message data to webhook:', error);
+        console.error('Error sending message data to local API:', error);
     }
 };
 
